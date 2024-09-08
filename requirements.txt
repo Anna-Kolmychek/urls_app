@@ -1,0 +1,5 @@
+aiosqlite==0.20.0
+fastapi[standard]==0.114.0
+requests==2.32.3
+SQLAlchemy==2.0.34
+uvicorn==0.30.6
