@@ -1,3 +1,4 @@
+import httpx
 import requests
 from fastapi import HTTPException
 from pydantic import HttpUrl
@@ -21,7 +22,7 @@ async def get_url_item_by_origin(db: AsyncSession, origin_url: str) -> models.Ur
 
 async def create_url_item(db: AsyncSession, url_item: schemas.UrlItemCreate) -> models.UrlItem:
     origin_url = url_item.origin_url
-    short_url = get_short_url(origin_url)
+    short_url = await get_short_url(origin_url)
 
     db_url_item = models.UrlItem(
         origin_url=str(origin_url),
@@ -34,12 +35,13 @@ async def create_url_item(db: AsyncSession, url_item: schemas.UrlItemCreate) -> 
     return db_url_item
 
 
-def get_short_url(origin_url) -> HttpUrl:
+async def get_short_url(origin_url) -> HttpUrl:
     short_url_maker = 'https://clck.ru/--'
-    response = requests.get(
-        short_url_maker,
-        params={'url': origin_url}
-    )
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            short_url_maker,
+            params={'url': origin_url}
+        )
     if response.status_code == 400 and response.text == 'Invalid URL':
         raise HTTPException(status_code=400, detail="Invalid URL")
     elif response.status_code == 200:

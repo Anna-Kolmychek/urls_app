@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./urls_app.db"
 
 async_engine = create_async_engine(SQLALCHEMY_DATABASE_URL)
-AsyncSessionLocal = async_sessionmaker(bind=async_engine, expire_on_commit=False)
+AsyncSessionLocal = async_sessionmaker(bind=async_engine, expire_on_commit=True)
 
 Base = declarative_base()
 
