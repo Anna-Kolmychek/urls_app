@@ -10,7 +10,7 @@ class UrlItemCreate(UrlItemBase):
 
 
 class UrlItem(UrlItemBase):
-    short_url: HttpUrl
+    shorten_url_id: str
     id: int
 
     class Config:
